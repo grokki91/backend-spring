@@ -1,18 +1,15 @@
 package com.myserver.springserver.controllers;
 
-import com.myserver.springserver.exception.FilmAlreadyExistException;
-import com.myserver.springserver.exception.FilmNotFoundException;
+import com.myserver.springserver.exception.AlreadyExistException;
+import com.myserver.springserver.exception.NotFoundException;
 import com.myserver.springserver.model.Film;
-import com.myserver.springserver.services.impl.FilmsServiceImpl;
+import com.myserver.springserver.services.implementation.FilmsServiceImpl;
 import com.myserver.springserver.util.ResponseJson;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import java.util.HashMap;
-import java.util.List;
 
 @RestController
 @RequestMapping("/api/films")
@@ -21,16 +18,22 @@ import java.util.List;
 public class FilmsController {
     private final FilmsServiceImpl filmsService;
 
+//    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
     @GetMapping
-    public List<Film> getMainPage() {
-        return filmsService.getFilms();
+    public ResponseEntity<?> getMainPage() {
+        try {
+            return ResponseEntity.ok(filmsService.getFilms());
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+        }
     }
 
+//    @PreAuthorize("hasAnyRole('ADMIN')")
     @GetMapping("/{id}")
     public ResponseEntity getFilm(@PathVariable Long id) {
         try {
             return ResponseEntity.ok(filmsService.getFilm(id));
-        } catch (FilmNotFoundException e) {
+        } catch (NotFoundException e) {
             return ResponseJson.createErrorResponse(HttpStatus.NOT_FOUND, e.getMessage());
         } catch (Exception e) {
             return ResponseJson.createErrorResponse(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
@@ -42,8 +45,8 @@ public class FilmsController {
         try {
             filmsService.addFilm(film);
             return ResponseJson.createSuccessResponse("Film has been added");
-        } catch (FilmAlreadyExistException e) {
-            return ResponseJson.createErrorResponse(HttpStatus.ALREADY_REPORTED, e.getMessage());
+        } catch (AlreadyExistException e) {
+            return ResponseJson.createErrorResponse(HttpStatus.CONFLICT, e.getMessage());
         } catch (Exception e) {
             return ResponseJson.createErrorResponse(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
         }
@@ -54,7 +57,7 @@ public class FilmsController {
         try {
             filmsService.updateFilm(id, film);
             return ResponseJson.createSuccessResponse("This film has been updated");
-        } catch (FilmNotFoundException e) {
+        } catch (NotFoundException e) {
             return ResponseJson.createErrorResponse(HttpStatus.NOT_FOUND, e.getMessage());
         } catch (Exception e) {
             return ResponseJson.createErrorResponse(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());

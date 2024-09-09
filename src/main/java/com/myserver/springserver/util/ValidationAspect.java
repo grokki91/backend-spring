@@ -1,6 +1,7 @@
 package com.myserver.springserver.util;
 
 import com.myserver.springserver.model.Film;
+import com.myserver.springserver.model.MyUser;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
@@ -16,6 +17,8 @@ public class ValidationAspect {
         for (Object arg : args) {
             if (arg instanceof Film) {
                 CheckValidation.validateFilm((Film) arg);
+            } else if (arg instanceof MyUser) {
+                CheckValidation.validateUser((MyUser) arg);
             }
         }
     }

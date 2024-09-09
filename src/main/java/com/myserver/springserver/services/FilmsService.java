@@ -1,22 +1,21 @@
 package com.myserver.springserver.services;
 
-import com.myserver.springserver.exception.FilmAlreadyExistException;
-import com.myserver.springserver.exception.FilmNotFoundException;
+import com.myserver.springserver.exception.AlreadyExistException;
+import com.myserver.springserver.exception.NotFoundException;
 import com.myserver.springserver.model.Film;
-import org.springframework.http.ResponseEntity;
 
 import java.util.List;
 
 public interface FilmsService {
     List<Film> getFilms();
 
-    Film getFilm(Long id) throws FilmNotFoundException;
+    Film getFilm(Long id) throws NotFoundException;
 
-    Film addFilm(Film film) throws FilmAlreadyExistException;
+    Film addFilm(Film film) throws AlreadyExistException;
 
-    Film updateFilm(Long idm, Film film) throws FilmNotFoundException;
+    Film updateFilm(Long idm, Film film) throws NotFoundException;
 
-    void deleteFilm(Long id) throws FilmNotFoundException;
+    void deleteFilm(Long id) throws NotFoundException;
 
     void deleteAllFilms();
 }

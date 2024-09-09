@@ -10,11 +10,14 @@ import lombok.NonNull;
 @Builder
 @Table(name="Films")
 public class Film {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     public Long id;
+
     @Column(unique = true)
     public String title;
+
     public Integer time;
 
     public Film() {}
