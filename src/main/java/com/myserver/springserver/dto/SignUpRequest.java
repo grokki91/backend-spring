@@ -7,4 +7,5 @@ public class SignUpRequest {
     public String username;
     public String password;
     public String email;
+    public Boolean isAdmin;
 }

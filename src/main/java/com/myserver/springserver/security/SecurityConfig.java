@@ -1,6 +1,5 @@
 package com.myserver.springserver.security;
 
-import com.myserver.springserver.exception.CustomeAuthException;
 import com.myserver.springserver.services.implementation.CustomUserDetailsService;
 import lombok.SneakyThrows;
 import org.springframework.context.annotation.Bean;
@@ -32,19 +31,17 @@ public class SecurityConfig {
 
     @SneakyThrows
     @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http, AuthenticationManager authManager) {
-        CustomAuthFilter customAuthFilter = new CustomAuthFilter(authManager, new CustomeAuthException());
-        customAuthFilter.setFilterProcessesUrl("/login");
+    public SecurityFilterChain filterChain(HttpSecurity http, AuthenticationManager authManager, JwtCore jwtCore) {
+        CustomAuthFilter customAuthFilter = new CustomAuthFilter(authManager, jwtCore);
 
         http
                 .csrf(AbstractHttpConfigurer::disable)
                 .sessionManagement((session) -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/", "/signup", "/login").permitAll()
+                        .requestMatchers("/signup", "/login").permitAll()
                         .anyRequest().authenticated())
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
                 .addFilterAt(customAuthFilter, UsernamePasswordAuthenticationFilter.class);
-
 
         return http.build();
     }

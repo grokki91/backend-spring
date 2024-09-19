@@ -21,7 +21,6 @@ public class AuthController {
 
     @PostMapping("/signup")
     public ResponseEntity signUp(@RequestBody SignUpRequest request) {
-        System.out.println("Запрос на регистрацию");
         try {
             return ResponseEntity.ok(authService.signUp(request));
         } catch (AlreadyExistException e) {

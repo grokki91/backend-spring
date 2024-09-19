@@ -33,11 +33,13 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     public JwtResponse signUp(SignUpRequest request) throws AlreadyExistException {
+        Role role = (request.getIsAdmin() != null && request.getIsAdmin()) ? Role.ROLE_ADMIN : Role.ROLE_USER;
+
         MyUser user = MyUser.builder()
                 .username(request.getUsername())
                 .email(request.getEmail())
                 .password(passwordEncoder.encode(request.getPassword()))
-                .role(Role.ROLE_USER)
+                .role(role)
                 .build();
 
 

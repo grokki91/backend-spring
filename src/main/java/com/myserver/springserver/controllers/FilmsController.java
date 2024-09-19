@@ -18,7 +18,6 @@ import org.springframework.web.bind.annotation.*;
 public class FilmsController {
     private final FilmsServiceImpl filmsService;
 
-//    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
     @GetMapping
     public ResponseEntity<?> getMainPage() {
         try {
@@ -28,7 +27,6 @@ public class FilmsController {
         }
     }
 
-//    @PreAuthorize("hasAnyRole('ADMIN')")
     @GetMapping("/{id}")
     public ResponseEntity getFilm(@PathVariable Long id) {
         try {
