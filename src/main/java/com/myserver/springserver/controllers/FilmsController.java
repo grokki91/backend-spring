@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/api/films")
 @AllArgsConstructor
-@CrossOrigin(origins = {"http://localhost:3000/"})
 public class FilmsController {
     private final FilmsServiceImpl filmsService;
 
