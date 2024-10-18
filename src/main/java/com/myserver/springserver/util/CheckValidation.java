@@ -1,30 +1,75 @@
 package com.myserver.springserver.util;
 
-import com.myserver.springserver.model.Film;
+import com.myserver.springserver.model.CharacterEntity;
 import com.myserver.springserver.model.MyUser;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.regex.Pattern;
 
 public class CheckValidation {
-    static String TITLE_REGEX = "^[\\p{L}0-9\\s.,'\"-]{1,50}$";
-    static String TIME_REGEX = "^[1-9][0-9]{0,2}$";
+    static String NAME_REGEX = "^[\\p{L}\\s\\-']{1,50}$";
+    static String ABILITIES_REGEX = "^[\\p{L}\\s,.-]{1,100}$";
     static String EMAIL_REGEX = "^[\\w._%+-]+@[\\w.-]+\\.[a-zA-Z]{2,}$";
+    static String TEAM_REGEX = "^[\\p{L}\\s]{1,50}$";
+    static String AGE_REGEX = "^[1-9][0-9]{0,2}$";
 
-    public static void validateFilm(Film film) {
+    public static void validateCharacter(CharacterEntity character) {
 
-        if (film == null) {
-            throw new IllegalArgumentException("Film cannot be null");
+        if (character == null) {
+            throw new IllegalArgumentException("Hero cannot be null");
         }
 
-        String title = film.getTitle();
-        Integer time = film.getTime();
+        List<String> missingFields = new ArrayList<>();
 
-        if (title.isEmpty() || !isValidTitle(title)) {
-            throw new IllegalArgumentException("Invalid field Title");
+        String alias = character.getAlias();
+        String fullName = character.getFull_name();
+        String alignment = character.getAlignment();
+        String abilities = character.getAbilities();
+        Integer age = character.getAge();
+        String team = character.getTeam();
+
+        if (alias == null) {
+            missingFields.add("alias");
+        } else if (!isValidName(alias)) {
+            throw new IllegalArgumentException("Invalid field Alias");
         }
 
-        if (time == null || !isValidTime(time)) {
-            throw new IllegalArgumentException("Invalid field Time");
+        if (fullName == null) {
+            missingFields.add("full_name");
+        } else if (!isValidName(fullName)) {
+            throw new IllegalArgumentException("Invalid field Full Name");
+        }
+
+        if (alignment == null) {
+            missingFields.add("alignment");
+        } else if (!alignment.equalsIgnoreCase("good") && !alignment.equalsIgnoreCase("evil") && !alignment.equalsIgnoreCase("neutral")) {
+            throw new IllegalArgumentException("Invalid field Alignment");
+        }
+
+        if (abilities == null) {
+            missingFields.add("abilities");
+        } else if (!isValidAbilities(abilities)) {
+            throw new IllegalArgumentException("Invalid field Abilities");
+        }
+
+        if (age == null) {
+            missingFields.add("age");
+        } else if (!isValidAge(age)) {
+            throw new IllegalArgumentException("Invalid field Age");
+        }
+
+        if (team == null) {
+            missingFields.add("team");
+        } else if (!isValidTeam(team)) {
+            throw new IllegalArgumentException("Invalid field Team");
+        }
+
+        if (!missingFields.isEmpty()) {
+            if (missingFields.size() == 1) {
+                throw new IllegalArgumentException("Missing field: " + missingFields.get(0));
+            }
+            throw new IllegalArgumentException("Missing fields: " + String.join(", ", missingFields));
         }
     }
 
@@ -37,7 +82,7 @@ public class CheckValidation {
         String username = user.getUsername();
         String email = user.getEmail();
 
-        if (username == null || !isValidTitle(username)) {
+        if (username == null || !isValidName(username)) {
             throw new IllegalArgumentException("Invalid field Username");
         }
 
@@ -46,9 +91,9 @@ public class CheckValidation {
         }
     }
 
-    private static boolean isValidTitle(String title) {
-        Pattern pattern = Pattern.compile(TITLE_REGEX);
-        return pattern.matcher(title).matches();
+    private static boolean isValidName(String name) {
+        Pattern pattern = Pattern.compile(NAME_REGEX);
+        return pattern.matcher(name).matches();
     }
 
     private static boolean isValidEmail(String email) {
@@ -56,8 +101,18 @@ public class CheckValidation {
         return pattern.matcher(email).matches();
     }
 
-    private static boolean isValidTime(Integer time) {
-        Pattern pattern = Pattern.compile(TIME_REGEX);
-        return pattern.matcher(time.toString()).matches();
+    private static boolean isValidAbilities(String abilities) {
+        Pattern pattern = Pattern.compile(ABILITIES_REGEX);
+        return pattern.matcher(abilities).matches();
+    }
+
+    private static boolean isValidAge(Integer age) {
+        Pattern pattern = Pattern.compile(AGE_REGEX);
+        return pattern.matcher(age.toString()).matches();
+    }
+
+    private static boolean isValidTeam(String team) {
+        Pattern pattern = Pattern.compile(TEAM_REGEX);
+        return pattern.matcher(team).matches();
     }
 }

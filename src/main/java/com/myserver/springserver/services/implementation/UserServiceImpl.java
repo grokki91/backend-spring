@@ -7,12 +7,15 @@ import com.myserver.springserver.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
 import java.util.Optional;
 
 @Service
 public class UserServiceImpl implements UserService {
+
+    private static final String USER_NOT_FOUND = "User with ID=%s does not exist";
+    private static final String USER_FOUND = "User with %s=%s already exists";
+
     @Autowired
     private UserRepo userRepo;
 
@@ -27,11 +30,11 @@ public class UserServiceImpl implements UserService {
         Optional<MyUser> email = userRepo.findByEmail(user.getEmail());
 
         if (username.isPresent()) {
-            throw new AlreadyExistException(String.format("User with name '%s' is already exist", user.getUsername()));
+            throw new AlreadyExistException(String.format(USER_FOUND, "USERNAME", user.getUsername()));
         }
 
         if (email.isPresent()) {
-            throw new AlreadyExistException(String.format("User with email '%s' is already exist", user.getEmail()));
+            throw new AlreadyExistException(String.format(USER_FOUND, "EMAIL", user.getEmail()));
         }
 
         return userRepo.save(user);
@@ -39,13 +42,13 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public MyUser getUser(Long id) {
-        return userRepo.findById(id).orElseThrow(() -> new UsernameNotFoundException("User not found"));
+        return userRepo.findById(id).orElseThrow(() -> new UsernameNotFoundException(String.format(USER_NOT_FOUND, id)));
     }
 
     @Override
     public void deleteUser(Long id) {
        if (userRepo.findById(id).isEmpty()) {
-           throw new UsernameNotFoundException("User not found");
+           throw new UsernameNotFoundException(String.format(USER_NOT_FOUND, id));
        }
        userRepo.deleteById(id);
     }

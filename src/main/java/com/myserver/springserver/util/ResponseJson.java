@@ -18,6 +18,13 @@ public class ResponseJson {
         return ResponseEntity.ok(response);
     }
 
+    public static ResponseEntity<HashMap<String, Object>> createSuccessResponse(String prefix, String alias, String suffix) {
+        HashMap<String, Object> response = new HashMap<>();
+        response.put("Status", "Success");
+        response.put("Message", prefix + " '" + alias + "' " + suffix);
+        return ResponseEntity.ok(response);
+    }
+
     public static ResponseEntity<HashMap<String, Object>> createSuccessResponse(HttpStatus status, String body) {
         HashMap<String, Object> response = new HashMap<>();
         response.put("Status", "Success");
