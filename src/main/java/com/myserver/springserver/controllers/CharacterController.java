@@ -41,7 +41,7 @@ public class CharacterController {
     public ResponseEntity addCharacter(@Validated @RequestBody CharacterEntity character) {
         try {
             characterService.addCharacter(character);
-            return ResponseJson.createSuccessResponse("Hero", character.getAlias(), "has been added");
+            return ResponseJson.createSuccessResponse("Character", character.getAlias(), "has been added");
         } catch (AlreadyExistException e) {
             return ResponseJson.createErrorResponse(HttpStatus.CONFLICT, e.getMessage());
         } catch (Exception e) {
@@ -53,7 +53,7 @@ public class CharacterController {
     public ResponseEntity updateCharacter(@PathVariable Long id, @RequestBody CharacterEntity character) {
         try {
             characterService.updateCharacter(id, character);
-            return ResponseJson.createSuccessResponse("Hero", character.getAlias(), "has been updated");
+            return ResponseJson.createSuccessResponse("Character", character.getAlias(), "has been updated");
         } catch (NotFoundException e) {
             return ResponseJson.createErrorResponse(HttpStatus.NOT_FOUND, e.getMessage());
         } catch (Exception e) {
@@ -66,7 +66,7 @@ public class CharacterController {
         try {
             CharacterEntity character = characterService.getCharacter(id);
             characterService.deleteCharacter(id);
-            return ResponseJson.createSuccessResponse("Hero", character.getAlias(),"has been removed");
+            return ResponseJson.createSuccessResponse("Character", character.getAlias(),"has been removed");
         } catch (Exception e) {
             return ResponseJson.createErrorResponse(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
         }
@@ -76,7 +76,7 @@ public class CharacterController {
     public ResponseEntity deleteAllCharacters() {
         try {
             characterService.deleteAllCharacters();
-            return ResponseJson.createSuccessResponse("All heroes have been removed");
+            return ResponseJson.createSuccessResponse("All characters have been removed");
         } catch (Exception e) {
             return ResponseJson.createErrorResponse(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
         }

@@ -12,8 +12,8 @@ import java.util.List;
 @Service
 public class CharacterServiceImpl implements CharacterService {
 
-    private static final String HERO_NOT_FOUND = "The hero with ID=%s does not exist";
-    private static final String HERO_FOUND = "The hero '%s' already exists";
+    private static final String HERO_NOT_FOUND = "The character with ID=%s does not exist";
+    private static final String HERO_FOUND = "The character '%s' already exists";
 
     @Autowired
     private CharacterRepo characterRepo;

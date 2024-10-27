@@ -1,12 +1,9 @@
 package com.myserver.springserver.util;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import jakarta.servlet.ServletResponse;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-
 import java.io.IOException;
 import java.util.HashMap;
 
@@ -22,13 +19,6 @@ public class ResponseJson {
         HashMap<String, Object> response = new HashMap<>();
         response.put("Status", "Success");
         response.put("Message", prefix + " '" + alias + "' " + suffix);
-        return ResponseEntity.ok(response);
-    }
-
-    public static ResponseEntity<HashMap<String, Object>> createSuccessResponse(HttpStatus status, String body) {
-        HashMap<String, Object> response = new HashMap<>();
-        response.put("Status", "Success");
-        response.put("Message", body);
         return ResponseEntity.ok(response);
     }
 
