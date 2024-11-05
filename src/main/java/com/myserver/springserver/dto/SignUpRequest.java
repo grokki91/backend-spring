@@ -1,6 +1,5 @@
 package com.myserver.springserver.dto;
 
-import com.myserver.springserver.model.Gender;
 import lombok.Data;
 
 import java.time.LocalDate;
@@ -10,7 +9,7 @@ public class SignUpRequest {
     public String username;
     public String password;
     public String email;
-    public Gender gender;
+    public String gender;
     public LocalDate birthday;
     public Boolean isAdmin;
 }

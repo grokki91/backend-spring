@@ -1,6 +1,7 @@
 package com.myserver.springserver.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Pattern;
 import lombok.Builder;
 import lombok.Data;
 
@@ -24,8 +25,8 @@ public class MyUser {
 
     public String password;
 
-    @Enumerated(EnumType.STRING)
-    public Gender gender;
+    @Pattern(regexp = "^(MALE|FEMALE)$", message = "Gender must be either 'MALE' or 'FEMALE'")
+    public String gender;
 
     public LocalDate birthday;
 
@@ -34,7 +35,7 @@ public class MyUser {
 
     public MyUser() {}
 
-    public MyUser(String username, String email, String password, Gender gender, LocalDate birthday, Role role) {
+    public MyUser(String username, String email, String password, String gender, LocalDate birthday, Role role) {
         this.username = username;
         this.email = email;
         this.password = password;
@@ -43,7 +44,7 @@ public class MyUser {
         this.role = role;
     }
 
-    public MyUser(Long id, String username, String email, String password, Gender gender, LocalDate birthday, Role role) {
+    public MyUser(Long id, String username, String email, String password, String gender, LocalDate birthday, Role role) {
         this.id = id;
         this.username = username;
         this.email = email;

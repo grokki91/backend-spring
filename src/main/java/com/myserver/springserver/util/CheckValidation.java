@@ -1,10 +1,12 @@
 package com.myserver.springserver.util;
 
 import com.myserver.springserver.model.CharacterEntity;
-import com.myserver.springserver.model.Gender;
 import com.myserver.springserver.model.MyUser;
 
 import java.time.LocalDate;
+import java.time.Period;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
@@ -16,7 +18,6 @@ public class CheckValidation {
     static String EMAIL_REGEX = "^[\\w._%+-]+@[\\w.-]+\\.[a-zA-Z]{2,}$";
     static String TEAM_REGEX = "^[\\p{L}0-9]+([-\\s][\\p{L}0-9]+){0,49}$";
     static String AGE_REGEX = "^(?:[1-9][0-9]{0,6}|[1-9][0-9]{0,6})$";
-    static String SEND_VALUE_GENDER;
 
     public static void validateCharacter(CharacterEntity character) {
 
@@ -85,8 +86,8 @@ public class CheckValidation {
 
         String username = user.getUsername();
         String email = user.getEmail();
-        Gender gender = user.getGender();
-//        LocalDate birthday = user.getBirthday();
+        String gender = user.getGender();
+        LocalDate birthday = user.getBirthday();
 
         if (username == null || !isValidName(username)) {
             throw new IllegalArgumentException("Invalid field Username");
@@ -98,6 +99,10 @@ public class CheckValidation {
 
         if (gender == null || !isValidGender(gender)) {
             throw new IllegalArgumentException("Invalid field Gender");
+        }
+
+        if (birthday == null || !isValidBirthday(birthday)) {
+            throw new IllegalArgumentException("Invalid field Birthday");
         }
     }
 
@@ -111,13 +116,15 @@ public class CheckValidation {
         return pattern.matcher(email).matches();
     }
 
-    private static boolean isValidGender(Gender gender) {
-        return gender.name().equalsIgnoreCase(SEND_VALUE_GENDER);
+    private static boolean isValidGender(String gender) {
+        return "MALE".equalsIgnoreCase(gender) || "FEMALE".equalsIgnoreCase(gender);
     }
 
-//    private static boolean isValidBirthday(String sendValue, Gender gender) {
-//        return gender.name().equalsIgnoreCase(sendValue);
-//    }
+    private static boolean isValidBirthday(LocalDate birthday) {
+        LocalDate now = LocalDate.now();
+        int age = Period.between(birthday, now).getYears();
+        return age > 0;
+    }
 
     private static boolean isValidAlias(String name) {
         Pattern pattern = Pattern.compile(ALIAS_REGEX);
