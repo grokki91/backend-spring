@@ -1,7 +1,6 @@
 package com.myserver.springserver.model;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Pattern;
 import lombok.Builder;
 import lombok.Data;
 
@@ -25,7 +24,6 @@ public class MyUser {
 
     public String password;
 
-    @Pattern(regexp = "^(MALE|FEMALE)$", message = "Gender must be either 'MALE' or 'FEMALE'")
     public String gender;
 
     public LocalDate birthday;
