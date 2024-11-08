@@ -8,7 +8,9 @@ import java.util.List;
 public interface UserService {
     List<MyUser> getAll();
 
-    MyUser add(MyUser user) throws AlreadyExistException;
+    MyUser save(MyUser user) throws AlreadyExistException;
+
+    MyUser updateUser(Long id, MyUser user) throws AlreadyExistException;
 
     MyUser getUser(Long id);
 

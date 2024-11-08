@@ -43,8 +43,20 @@ public class UserController {
     @PostMapping("/add")
     public ResponseEntity addUser(@RequestBody MyUser user) {
         try {
-            userService.add(user);
+            userService.save(user);
             return ResponseJson.createSuccessResponse("User has been added");
+        } catch (AlreadyExistException e) {
+            return ResponseJson.createErrorResponse(HttpStatus.CONFLICT, e.getMessage());
+        } catch (Exception e) {
+            return ResponseJson.createErrorResponse(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
+        }
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity updateUser(@PathVariable Long id, @RequestBody MyUser user) {
+        try {
+            userService.updateUser(id, user);
+            return ResponseJson.createSuccessResponse("User has been updated");
         } catch (AlreadyExistException e) {
             return ResponseJson.createErrorResponse(HttpStatus.CONFLICT, e.getMessage());
         } catch (Exception e) {

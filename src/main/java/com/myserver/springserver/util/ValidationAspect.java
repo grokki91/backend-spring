@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class ValidationAspect {
 
-    @Before("execution(* com.myserver.springserver.services..*(..))")
+    @Before("execution(* com.myserver.springserver.services.implementation.UserServiceImpl.save(..))")
     public void validateBeforeMethod(JoinPoint joinPoint) {
         Object[] args = joinPoint.getArgs();
         for (Object arg : args) {

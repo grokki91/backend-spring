@@ -2,6 +2,9 @@ package com.myserver.springserver.model;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
+
+import java.time.LocalDateTime;
 
 @Data
 @Entity
@@ -34,4 +37,6 @@ public class CharacterEntity {
     @NonNull
     public String team;
 
+    @CreationTimestamp
+    public LocalDateTime dateTime;
 }
