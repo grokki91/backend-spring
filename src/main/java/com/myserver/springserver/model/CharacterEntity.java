@@ -38,5 +38,7 @@ public class CharacterEntity {
     public String team;
 
     @CreationTimestamp
-    public LocalDateTime dateTime;
+    public LocalDateTime created = LocalDateTime.now();
+
+    public LocalDateTime updated;
 }
