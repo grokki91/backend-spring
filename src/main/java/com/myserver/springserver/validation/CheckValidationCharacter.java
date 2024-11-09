@@ -1,23 +1,19 @@
-package com.myserver.springserver.util;
+package com.myserver.springserver.validation;
 
 import com.myserver.springserver.model.CharacterEntity;
-import com.myserver.springserver.model.MyUser;
 
-import java.time.LocalDate;
-import java.time.Period;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
 
-public class CheckValidation {
+public class CheckValidationCharacter {
     static String ALIAS_REGEX = "^[\\p{L}\\s\\-']+|[0-9]{1,50}$";
-    static String NAME_REGEX = "^[\\p{L}\\s\\-']{1,50}$";
+    static String FULLNAME_REGEX = "^[\\p{L}\\s\\-']{1,50}$";
     static String ABILITIES_REGEX = "^[\\p{L}\\s,.-]{1,100}$";
-    static String EMAIL_REGEX = "^[\\w._%+-]+@[\\w.-]+\\.[a-zA-Z]{2,}$";
     static String TEAM_REGEX = "^[\\p{L}0-9]+([-\\s][\\p{L}0-9]+){0,49}$";
     static String AGE_REGEX = "^(?:[1-9][0-9]{0,6}|[1-9][0-9]{0,6})$";
 
-    public static void validateCharacter(CharacterEntity character) {
+    public static void validate(CharacterEntity character) {
 
         if (character == null) {
             throw new IllegalArgumentException("Character cannot be null");
@@ -40,7 +36,7 @@ public class CheckValidation {
 
         if (fullName == null) {
             missingFields.add("full_name");
-        } else if (!isValidName(fullName)) {
+        } else if (!isValidFullName(fullName)) {
             throw new IllegalArgumentException("Invalid field Full Name");
         }
 
@@ -76,52 +72,29 @@ public class CheckValidation {
         }
     }
 
-    public static void validateUser(MyUser user) {
-
-        if (user == null) {
-            throw new IllegalArgumentException("User cannot be null");
-        }
-
-        String username = user.getUsername();
-        String email = user.getEmail();
-        String gender = user.getGender();
-        LocalDate birthday = user.getBirthday();
-
-        if (username == null || !isValidName(username)) {
-            throw new IllegalArgumentException("Invalid field Username");
-        }
-
-        if (email == null || !isValidEmail(email)) {
-            throw new IllegalArgumentException("Invalid field Email");
-        }
-
-        if (gender == null || !isValidGender(gender)) {
-            throw new IllegalArgumentException("Invalid field Gender");
-        }
-
-        if (birthday == null || !isValidBirthday(birthday)) {
-            throw new IllegalArgumentException("Invalid field Birthday");
-        }
+    public static void validateAlias(String alias) {
+        if (!isValidAlias(alias)) throw new IllegalArgumentException("Invalid field Alias");
     }
 
-    private static boolean isValidName(String name) {
-        Pattern pattern = Pattern.compile(NAME_REGEX);
-        return pattern.matcher(name).matches();
+    public static void validateFullName(String fullname) {
+        if (!isValidFullName(fullname)) throw new IllegalArgumentException("Invalid field Full Name");
     }
 
-    private static boolean isValidEmail(String email) {
-        Pattern pattern = Pattern.compile(EMAIL_REGEX);
-        return pattern.matcher(email).matches();
+    public static void validateAbilities(String abilities) {
+        if (!isValidAbilities(abilities)) throw new IllegalArgumentException("Invalid field Abilities");
     }
 
-    private static boolean isValidGender(String gender) {
-        return "MALE".equalsIgnoreCase(gender) || "FEMALE".equalsIgnoreCase(gender);
+    public static void validateAge(int age) {
+        if (!isValidAge(age)) throw new IllegalArgumentException("Invalid field Age");
     }
 
-    private static boolean isValidBirthday(LocalDate birthday) {
-        LocalDate now = LocalDate.now();
-        int age = Period.between(birthday, now).getYears();
-        return age > 0;
+    public static void validateTeam(String team) {
+        if (!isValidTeam(team)) throw new IllegalArgumentException("Invalid field Team");
+    }
+
+    private static boolean isValidFullName(String fullname) {
+        Pattern pattern = Pattern.compile(FULLNAME_REGEX);
+        return pattern.matcher(fullname).matches();
     }
 
     private static boolean isValidAlias(String name) {

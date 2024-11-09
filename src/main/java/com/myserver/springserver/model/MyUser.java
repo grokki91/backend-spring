@@ -1,5 +1,6 @@
 package com.myserver.springserver.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Data;
@@ -24,6 +25,7 @@ public class MyUser {
     @Column(unique = true)
     public String email;
 
+    @JsonIgnore
     public String password;
 
     public String gender;

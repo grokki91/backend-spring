@@ -49,11 +49,11 @@ public class CharacterController {
         }
     }
 
-    @PutMapping("/{id}")
+    @PatchMapping("/{id}")
     public ResponseEntity updateCharacter(@PathVariable Long id, @RequestBody CharacterEntity character) {
         try {
             characterService.updateCharacter(id, character);
-            return ResponseJson.createSuccessResponse("Character", character.getAlias(), "has been updated");
+            return ResponseJson.createSuccessResponse("Character has been updated");
         } catch (NotFoundException e) {
             return ResponseJson.createErrorResponse(HttpStatus.NOT_FOUND, e.getMessage());
         } catch (Exception e) {
