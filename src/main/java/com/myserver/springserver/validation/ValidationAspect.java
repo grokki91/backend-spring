@@ -6,7 +6,6 @@ import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
 import org.springframework.stereotype.Component;
-
 import java.io.Serializable;
 import java.util.Objects;
 import java.util.stream.Stream;
@@ -59,7 +58,7 @@ public class ValidationAspect {
     }
 
     private void validateOptionFieldsCharacter(CharacterEntity character) {
-        Stream<? extends Serializable> stream = Stream.of(character.getAlias(), character.getFull_name(), character.getAbilities(), character.getAlignment(), character.getAge(), character.getTeam());
+        Stream<? extends Serializable> stream = Stream.of(character.getAlias(), character.getFullname(), character.getAbilities(), character.getAlignment(), character.getAge(), character.getTeam());
         if (stream.allMatch(Objects::isNull)) {
             throw new IllegalArgumentException(errorMessage);
         };
@@ -68,8 +67,8 @@ public class ValidationAspect {
             CheckValidationCharacter.validateAlias(character.getAlias());
         };
 
-        if (character.getFull_name() != null) {
-            CheckValidationCharacter.validateFullName(character.getFull_name());
+        if (character.getFullname() != null) {
+            CheckValidationCharacter.validateFullName(character.getFullname());
         };
 
         if (character.getAbilities() != null) {

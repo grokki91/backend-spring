@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.regex.Pattern;
 
 public class CheckValidationCharacter {
-    static String ALIAS_REGEX = "^[\\p{L}\\s\\-']+|[0-9]{1,50}$";
+    static String ALIAS_REGEX = "^[\\p{L}\\s\\-']+[0-9]{1,50}$";
     static String FULLNAME_REGEX = "^[\\p{L}\\s\\-']{1,50}$";
     static String ABILITIES_REGEX = "^[\\p{L}\\s,.-]{1,100}$";
     static String TEAM_REGEX = "^[\\p{L}0-9]+([-\\s][\\p{L}0-9]+){0,49}$";
@@ -22,7 +22,7 @@ public class CheckValidationCharacter {
         List<String> missingFields = new ArrayList<>();
 
         String alias = character.getAlias();
-        String fullName = character.getFull_name();
+        String fullName = character.getFullname();
         String alignment = character.getAlignment();
         String abilities = character.getAbilities();
         Integer age = character.getAge();
@@ -31,37 +31,37 @@ public class CheckValidationCharacter {
         if (alias == null) {
             missingFields.add("alias");
         } else if (!isValidAlias(alias)) {
-            throw new IllegalArgumentException("Invalid field Alias");
+            throw new IllegalArgumentException("Invalid field alias");
         }
 
         if (fullName == null) {
-            missingFields.add("full_name");
+            missingFields.add("fullname");
         } else if (!isValidFullName(fullName)) {
-            throw new IllegalArgumentException("Invalid field Full Name");
+            throw new IllegalArgumentException("Invalid field fullname");
         }
 
         if (alignment == null) {
             missingFields.add("alignment");
         } else if (!alignment.equalsIgnoreCase("good") && !alignment.equalsIgnoreCase("evil") && !alignment.equalsIgnoreCase("neutral")) {
-            throw new IllegalArgumentException("Invalid field Alignment");
+            throw new IllegalArgumentException("Invalid field alignment");
         }
 
         if (abilities == null) {
             missingFields.add("abilities");
         } else if (!isValidAbilities(abilities)) {
-            throw new IllegalArgumentException("Invalid field Abilities");
+            throw new IllegalArgumentException("Invalid field abilities");
         }
 
         if (age == null) {
             missingFields.add("age");
         } else if (!isValidAge(age)) {
-            throw new IllegalArgumentException("Invalid field Age");
+            throw new IllegalArgumentException("Invalid field age");
         }
 
         if (team == null) {
             missingFields.add("team");
         } else if (!isValidTeam(team)) {
-            throw new IllegalArgumentException("Invalid field Team");
+            throw new IllegalArgumentException("Invalid field team");
         }
 
         if (!missingFields.isEmpty()) {
@@ -73,23 +73,23 @@ public class CheckValidationCharacter {
     }
 
     public static void validateAlias(String alias) {
-        if (!isValidAlias(alias)) throw new IllegalArgumentException("Invalid field Alias");
+        if (!isValidAlias(alias)) throw new IllegalArgumentException("Invalid field alias");
     }
 
     public static void validateFullName(String fullname) {
-        if (!isValidFullName(fullname)) throw new IllegalArgumentException("Invalid field Full Name");
+        if (!isValidFullName(fullname)) throw new IllegalArgumentException("Invalid field fullname");
     }
 
     public static void validateAbilities(String abilities) {
-        if (!isValidAbilities(abilities)) throw new IllegalArgumentException("Invalid field Abilities");
+        if (!isValidAbilities(abilities)) throw new IllegalArgumentException("Invalid field abilities");
     }
 
     public static void validateAge(int age) {
-        if (!isValidAge(age)) throw new IllegalArgumentException("Invalid field Age");
+        if (!isValidAge(age)) throw new IllegalArgumentException("Invalid field age");
     }
 
     public static void validateTeam(String team) {
-        if (!isValidTeam(team)) throw new IllegalArgumentException("Invalid field Team");
+        if (!isValidTeam(team)) throw new IllegalArgumentException("Invalid field team");
     }
 
     private static boolean isValidFullName(String fullname) {

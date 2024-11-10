@@ -23,7 +23,7 @@ public class CharacterEntity {
     public String alias;
 
     @NonNull
-    public String full_name;
+    public String fullname;
 
     @NonNull
     public String alignment;

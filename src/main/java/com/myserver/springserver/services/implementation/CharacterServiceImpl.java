@@ -7,7 +7,6 @@ import com.myserver.springserver.repository.CharacterRepo;
 import com.myserver.springserver.services.CharacterService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -44,7 +43,7 @@ public class CharacterServiceImpl implements CharacterService {
         CharacterEntity updateHero = this.getCharacter(id);
 
         if (character.getAlias() != null) updateHero.setAlias(character.getAlias());
-        if (character.getFull_name() != null) updateHero.setFull_name(character.getFull_name());
+        if (character.getFullname() != null) updateHero.setFullname(character.getFullname());
         if (character.getAlignment() != null) updateHero.setAlignment(character.getAlignment());
         if (character.getAbilities() != null) updateHero.setAbilities(character.getAbilities());
         if (character.getAge() != null) updateHero.setAge(character.getAge());

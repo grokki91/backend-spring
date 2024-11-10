@@ -1,7 +1,6 @@
 package com.myserver.springserver.validation;
 
 import com.myserver.springserver.model.MyUser;
-
 import java.time.LocalDate;
 import java.time.Period;
 import java.util.regex.Pattern;
@@ -22,36 +21,36 @@ public class CheckValidationUser {
         LocalDate birthday = user.getBirthday();
 
         if (username == null || !isValidUsername(username)) {
-            throw new IllegalArgumentException("Invalid field Username");
+            throw new IllegalArgumentException("Invalid field username");
         }
 
         if (email == null || !isValidEmail(email)) {
-            throw new IllegalArgumentException("Invalid field Email");
+            throw new IllegalArgumentException("Invalid field email");
         }
 
         if (gender == null || !isValidGender(gender)) {
-            throw new IllegalArgumentException("Invalid field Gender");
+            throw new IllegalArgumentException("Invalid field gender");
         }
 
         if (birthday == null || !isValidBirthday(birthday)) {
-            throw new IllegalArgumentException("Invalid field Birthday");
+            throw new IllegalArgumentException("Invalid field birthday");
         }
     }
 
     public static void validateUsername(String username) {
-        if (!isValidUsername(username)) throw new IllegalArgumentException("Invalid field Username");
+        if (!isValidUsername(username)) throw new IllegalArgumentException("Invalid field username");
     }
 
     public static void validateEmail(String email) {
-        if (!isValidEmail(email)) throw new IllegalArgumentException("Invalid field Email");
+        if (!isValidEmail(email)) throw new IllegalArgumentException("Invalid field email");
     }
 
     public static void validateGender(String gender) {
-        if (!isValidGender(gender)) throw new IllegalArgumentException("Invalid field Gender");
+        if (!isValidGender(gender)) throw new IllegalArgumentException("Invalid field gender");
     }
 
     public static void validateBirthday(LocalDate birthday) {
-        if (!isValidBirthday(birthday)) throw new IllegalArgumentException("Invalid field Birthday");
+        if (!isValidBirthday(birthday)) throw new IllegalArgumentException("Invalid field birthday");
     }
 
     private static boolean isValidUsername(String name) {
