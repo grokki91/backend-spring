@@ -7,11 +7,11 @@ import java.util.List;
 import java.util.regex.Pattern;
 
 public class CheckValidationCharacter {
-    static String ALIAS_REGEX = "^[\\p{L}\\s\\-']+[0-9]{1,50}$";
-    static String FULLNAME_REGEX = "^[\\p{L}\\s\\-']{1,50}$";
-    static String ABILITIES_REGEX = "^[\\p{L}\\s,.-]{1,100}$";
-    static String TEAM_REGEX = "^[\\p{L}0-9]+([-\\s][\\p{L}0-9]+){0,49}$";
-    static String AGE_REGEX = "^(?:[1-9][0-9]{0,6}|[1-9][0-9]{0,6})$";
+    static String ALIAS_REGEX = "^(?!.*\\s{2})[\\p{L}'0-9\\s-]{1,50}$";
+    static String FULLNAME_REGEX = "^(?!.*\\s{2})[\\p{L}'0-9\\s-]{1,50}$";
+    static String ABILITIES_REGEX = "^(?!.*\\s{2})[\\p{L}\\s,.-]{1,100}$";
+    static String TEAM_REGEX = "^(?!.*\\s{2})[\\p{L}0-9]+([-\\s][\\p{L}0-9]+){0,50}$";
+    static String AGE_REGEX = "^[1-9][0-9]{0,9}$";
 
     public static void validate(CharacterEntity character) {
 
