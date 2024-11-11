@@ -41,7 +41,7 @@ public class JwtFilter extends OncePerRequestFilter {
     protected void doFilterInternal(@NonNull HttpServletRequest request, @NonNull HttpServletResponse response, @NonNull FilterChain filterChain) throws ServletException, IOException {
         String uri = request.getRequestURI();
 
-        if (uri.equals("/signup") || uri.equals("/login")) {
+        if (uri.equals("/signup") || uri.equals("/login") || uri.contains("/swagger-ui") || uri.contains("/v3/api-docs") || uri.contains("/swagger-resources/") || uri.contains("/webjars/")) {
             filterChain.doFilter(request, response);
             return;
         }

@@ -4,6 +4,7 @@ import com.myserver.springserver.exception.AlreadyExistException;
 import com.myserver.springserver.model.MyUser;
 import com.myserver.springserver.services.UserService;
 import com.myserver.springserver.util.ResponseJson;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/users")
 @AllArgsConstructor
 @PreAuthorize("hasAnyRole('ADMIN')")
+@SecurityRequirement(name = "bearerAuth")
 public class UserController {
     @Autowired
     private UserService userService;
