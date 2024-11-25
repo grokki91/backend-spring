@@ -1,5 +1,6 @@
 package com.myserver.springserver.controllers;
 
+import com.myserver.springserver.dto.ChangePasswordRequest;
 import com.myserver.springserver.exception.AlreadyExistException;
 import com.myserver.springserver.model.MyUser;
 import com.myserver.springserver.services.UserService;
@@ -83,6 +84,18 @@ public class UserController {
         try {
             userService.deleteAllUsers();
             return ResponseJson.createSuccessResponse("All users have been removed");
+        } catch (Exception e) {
+            return ResponseJson.createErrorResponse(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
+        }
+    }
+
+    @PostMapping("/change-password/{id}")
+    public ResponseEntity changePassword(@PathVariable Long id, @RequestBody ChangePasswordRequest req) {
+        try {
+            userService.changePassword(id, req.getPassword(), req.getNewPassword(), req.getConfirmPassword());
+            return ResponseJson.createSuccessResponse("Password has been successfully changed");
+        } catch (UsernameNotFoundException e) {
+            return ResponseJson.createErrorResponse(HttpStatus.NOT_FOUND, e.getMessage());
         } catch (Exception e) {
             return ResponseJson.createErrorResponse(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
         }

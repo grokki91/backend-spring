@@ -17,4 +17,6 @@ public interface UserService {
     void deleteUser(Long id);
 
     void deleteAllUsers();
+
+    void changePassword(Long id, String currentPassword, String newPassword, String confirmPassword) throws Exception;
 }

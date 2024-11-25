@@ -19,6 +19,8 @@ import java.util.Optional;
 public class UserServiceImpl implements UserService {
     private static final String USER_NOT_FOUND = "User with ID=%s does not exist";
     private static final String USER_FOUND = "User with %s=%s already exists";
+    private static final String INCORRECT_PASS = "Current password is incorrect";
+    private static final String NOT_MATCH_PASS = "Passwords don't match";
 
     private final PasswordEncoder passwordEncoder;
 
@@ -88,5 +90,21 @@ public class UserServiceImpl implements UserService {
     @Override
     public void deleteAllUsers() {
         userRepo.deleteAll();
+    }
+
+    @Override
+    public void changePassword(Long id, String currentPassword, String newPassword, String confirmPassword) throws Exception {
+        MyUser user = this.getUser(id);
+
+        if (!passwordEncoder.matches(currentPassword, user.getPassword())) {
+            throw new Exception(INCORRECT_PASS);
+        }
+
+        if (!newPassword.equals(confirmPassword)) {
+            throw new Exception(NOT_MATCH_PASS);
+        }
+
+        user.setPassword(passwordEncoder.encode(newPassword));
+        userRepo.save(user);
     }
 }
