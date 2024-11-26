@@ -31,6 +31,7 @@ public class JwtCore {
         if (userDetails instanceof CustomUserDetails customUserDetails) {
             MyUser user = customUserDetails.getUser();
             claims.put("id", user.getId());
+            claims.put("username", user.getUsername());
             claims.put("email", user.getEmail());
             claims.put("role", user.getRole());
         }
