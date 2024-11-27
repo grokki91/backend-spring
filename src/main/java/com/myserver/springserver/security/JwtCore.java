@@ -7,6 +7,8 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 import javax.crypto.SecretKey;
@@ -36,8 +38,9 @@ public class JwtCore {
             claims.put("role", user.getRole());
         }
 
-        return generateToken(claims,userDetails);
+        return generateToken(claims, userDetails);
     }
+
     public String generateToken(Map<String, Object> extraClaims, UserDetails userDetails) {
         return Jwts.builder()
                 .setClaims(extraClaims).setSubject(userDetails.getUsername())
@@ -71,4 +74,20 @@ public class JwtCore {
     private boolean isTokenExpired(String token) {
         return extractAll(token).getExpiration().before(new Date());
     }
+
+    public boolean isCurrentIdMatch(Long id) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        if (authentication.getAuthorities().stream().anyMatch(auth -> auth.getAuthority().contains("ADMIN"))) {
+            return true;
+        }
+
+        if (authentication == null || !(authentication.getPrincipal() instanceof UserDetails)) {
+            return false;
+        }
+
+        CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
+        return userDetails.getUser().getId().equals(id);
+    }
+
 }

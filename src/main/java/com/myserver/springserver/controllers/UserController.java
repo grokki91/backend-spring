@@ -3,6 +3,7 @@ package com.myserver.springserver.controllers;
 import com.myserver.springserver.dto.ChangePasswordRequest;
 import com.myserver.springserver.exception.AlreadyExistException;
 import com.myserver.springserver.model.MyUser;
+import com.myserver.springserver.security.JwtCore;
 import com.myserver.springserver.services.UserService;
 import com.myserver.springserver.util.ResponseJson;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
@@ -17,13 +18,17 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/api/users")
 @AllArgsConstructor
-@PreAuthorize("hasAnyRole('ADMIN')")
 @SecurityRequirement(name = "bearerAuth")
 public class UserController {
     @Autowired
     private UserService userService;
 
+    private JwtCore jwtCore;
+
+    private final static String ACCESS_DENIED = "Access denied";
+
     @GetMapping
+    @PreAuthorize("hasAnyRole('ADMIN')")
     public ResponseEntity<?> getUsers() {
         try {
             return ResponseEntity.ok(userService.getAll());
@@ -33,8 +38,13 @@ public class UserController {
     }
 
     @GetMapping("/{id}")
+    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
     public ResponseEntity<?> getUser(@PathVariable Long id) {
         try {
+            if (!jwtCore.isCurrentIdMatch(id)) {
+                return ResponseJson.createErrorResponse(HttpStatus.FORBIDDEN, ACCESS_DENIED);
+            }
+
             return ResponseEntity.ok(userService.getUser(id));
         } catch (UsernameNotFoundException e) {
             return ResponseJson.createErrorResponse(HttpStatus.NOT_FOUND, e.getMessage());
@@ -44,6 +54,7 @@ public class UserController {
     }
 
     @PostMapping("/add")
+    @PreAuthorize("hasAnyRole('ADMIN')")
     public ResponseEntity addUser(@RequestBody MyUser user) {
         try {
             userService.save(user);
@@ -56,8 +67,13 @@ public class UserController {
     }
 
     @PatchMapping("/{id}")
+    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
     public ResponseEntity updateUser(@PathVariable Long id, @RequestBody MyUser user) {
         try {
+            if (!jwtCore.isCurrentIdMatch(id)) {
+                return ResponseJson.createErrorResponse(HttpStatus.FORBIDDEN, ACCESS_DENIED);
+            }
+
             userService.updateUser(id, user);
             return ResponseJson.createSuccessResponse("User has been updated");
         } catch (AlreadyExistException e) {
@@ -68,6 +84,7 @@ public class UserController {
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasAnyRole('ADMIN')")
     public ResponseEntity deleteUser(@PathVariable Long id) {
         try {
             userService.deleteUser(id);
@@ -80,6 +97,7 @@ public class UserController {
     }
 
     @DeleteMapping("/all")
+    @PreAuthorize("hasAnyRole('ADMIN')")
     public ResponseEntity deleteAllUsers() {
         try {
             userService.deleteAllUsers();
@@ -90,8 +108,13 @@ public class UserController {
     }
 
     @PostMapping("/change-password/{id}")
+    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
     public ResponseEntity changePassword(@PathVariable Long id, @RequestBody ChangePasswordRequest req) {
         try {
+            if (!jwtCore.isCurrentIdMatch(id)) {
+                return ResponseJson.createErrorResponse(HttpStatus.FORBIDDEN, ACCESS_DENIED);
+            }
+
             userService.changePassword(id, req.getPassword(), req.getNewPassword(), req.getConfirmPassword());
             return ResponseJson.createSuccessResponse("Password has been successfully changed");
         } catch (UsernameNotFoundException e) {
