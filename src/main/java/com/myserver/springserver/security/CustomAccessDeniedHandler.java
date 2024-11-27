@@ -1,7 +1,6 @@
 package com.myserver.springserver.security;
 
 import com.myserver.springserver.util.ResponseJson;
-import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.security.access.AccessDeniedException;

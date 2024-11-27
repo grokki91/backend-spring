@@ -6,8 +6,8 @@ import java.time.Period;
 import java.util.regex.Pattern;
 
 public class CheckValidationUser {
-    static String USERNAME_REGEX = "^[\\p{L}\\s\\-']{1,50}$";
-    static String EMAIL_REGEX = "^[\\w._%+-]+@[\\w.-]+\\.[a-zA-Z]{2,}$";
+    static String USERNAME_REGEX = "^(?!.*\\s{2})[A-Za-z0-9\\s\\-'_\\.]{3,50}$";
+    static String EMAIL_REGEX = "^(?!.*\\s)[\\w._%+-]+@[\\w.-]+\\.[a-zA-Z]{2,}$";
 
     public static void validate(MyUser user) {
 
