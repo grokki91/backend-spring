@@ -22,8 +22,6 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
-import java.util.Arrays;
-
 @Configuration
 @EnableWebSecurity
 @EnableMethodSecurity
@@ -36,7 +34,7 @@ public class SecurityConfig {
     private AccessDeniedHandler accessDeniedHandler;
 
     @Value("${app.cors}")
-    private String corsAllowedOrigins;
+    private String corsAllowedOrigin;
 
     public SecurityConfig(JwtFilter jwtFilter, CustomUserDetailsService detailsService) {
         this.jwtFilter = jwtFilter;
@@ -77,9 +75,7 @@ public class SecurityConfig {
     @Bean
     public CorsConfigurationSource corsConfig() {
         CorsConfiguration configuration = new CorsConfiguration();
-        String[] allowedOrigins = corsAllowedOrigins.split(",");
-        configuration.addAllowedOriginPattern(Arrays.toString(allowedOrigins));
-
+        configuration.addAllowedOrigin(corsAllowedOrigin);
         configuration.addAllowedMethod("*");
         configuration.addAllowedHeader("*");
         configuration.setAllowCredentials(true);
