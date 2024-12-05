@@ -3,6 +3,7 @@ package com.myserver.springserver.security;
 import com.myserver.springserver.services.implementation.CustomUserDetailsService;
 import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -21,6 +22,8 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
+import java.util.Arrays;
+
 @Configuration
 @EnableWebSecurity
 @EnableMethodSecurity
@@ -31,6 +34,9 @@ public class SecurityConfig {
 
     @Autowired
     private AccessDeniedHandler accessDeniedHandler;
+
+    @Value("${app.cors}")
+    private String corsAllowedOrigins;
 
     public SecurityConfig(JwtFilter jwtFilter, CustomUserDetailsService detailsService) {
         this.jwtFilter = jwtFilter;
@@ -71,7 +77,9 @@ public class SecurityConfig {
     @Bean
     public CorsConfigurationSource corsConfig() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.addAllowedOrigin("http://localhost:3000");
+        String[] allowedOrigins = corsAllowedOrigins.split(",");
+        configuration.addAllowedOriginPattern(Arrays.toString(allowedOrigins));
+
         configuration.addAllowedMethod("*");
         configuration.addAllowedHeader("*");
         configuration.setAllowCredentials(true);
