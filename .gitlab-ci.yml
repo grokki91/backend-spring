@@ -8,6 +8,7 @@ cache:
 deploy-backend:
   stage: deploy
   before_script:
+    - mkdir -p ~/.ssh
     - echo "$SSH_PRIVATE_KEY" | tee ~/.ssh/id_rsa > /dev/null
     - chmod 600 ~/.ssh/id_rsa
     - ssh-keyscan -H 185.139.69.119 >> ~/.ssh/known_hosts
