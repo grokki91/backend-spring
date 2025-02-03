@@ -1,0 +1,26 @@
+image: maven:latest
+
+cache:
+  paths:
+    - .m2/repository
+    - target
+
+deploy-backend:
+  stage: deploy
+  before_script:
+    - echo "$SSH_PRIVATE_KEY" | tee ~/.ssh/id_rsa > /dev/null
+    - chmod 600 ~/.ssh/id_rsa
+    - ssh-keyscan -H 185.139.69.119 >> ~/.ssh/known_hosts
+  script:
+    - echo "Deploying backend to VPS..."
+    - ssh -i ~/.ssh/id_rsa hero@185.139.69.119 <<'EOF'
+      set -e
+      cd app/server
+      git pull origin main
+      mvn clean package
+      pm2 delete server || true
+      pm2 start java --name "server" -- -jar target/*.jar
+      pm2 save
+    EOF
+  only:
+    - main
