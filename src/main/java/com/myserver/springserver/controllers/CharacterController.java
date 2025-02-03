@@ -5,6 +5,8 @@ import com.myserver.springserver.exception.NotFoundException;
 import com.myserver.springserver.model.CharacterEntity;
 import com.myserver.springserver.services.implementation.CharacterServiceImpl;
 import com.myserver.springserver.util.ResponseJson;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/api/characters")
 @AllArgsConstructor
+@SecurityRequirement(name = "bearerAuth")
 public class CharacterController {
     private final CharacterServiceImpl characterService;
 
@@ -49,11 +52,11 @@ public class CharacterController {
         }
     }
 
-    @PutMapping("/{id}")
+    @PatchMapping("/{id}")
     public ResponseEntity updateCharacter(@PathVariable Long id, @RequestBody CharacterEntity character) {
         try {
             characterService.updateCharacter(id, character);
-            return ResponseJson.createSuccessResponse("Character", character.getAlias(), "has been updated");
+            return ResponseJson.createSuccessResponse("Character has been updated");
         } catch (NotFoundException e) {
             return ResponseJson.createErrorResponse(HttpStatus.NOT_FOUND, e.getMessage());
         } catch (Exception e) {

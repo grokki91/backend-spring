@@ -29,6 +29,13 @@ public class ResponseJson {
         return ResponseEntity.status(status).body(response);
     }
 
+    public static HttpServletResponse addAccessDeniedResponse(HttpServletResponse response) throws IOException {
+        response.setStatus(HttpServletResponse.SC_FORBIDDEN);
+        response.setContentType("application/json");
+        response.getWriter().write("{\"Status\": \"Error\", \"Message\":\"Access denied\"}");
+        return response;
+    }
+
     public static void authFailHandler(HttpServletResponse response, String body) throws IOException {
         HashMap<String, Object> responseMap = new HashMap<>();
         responseMap.put("Status", "Error");

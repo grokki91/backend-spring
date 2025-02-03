@@ -2,6 +2,9 @@ package com.myserver.springserver.model;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
+
+import java.time.LocalDateTime;
 
 @Data
 @Entity
@@ -20,7 +23,7 @@ public class CharacterEntity {
     public String alias;
 
     @NonNull
-    public String full_name;
+    public String fullname;
 
     @NonNull
     public String alignment;
@@ -34,4 +37,8 @@ public class CharacterEntity {
     @NonNull
     public String team;
 
+    @CreationTimestamp
+    public LocalDateTime created = LocalDateTime.now();
+
+    public LocalDateTime updated;
 }

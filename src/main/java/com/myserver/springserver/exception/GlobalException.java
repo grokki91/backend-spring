@@ -12,6 +12,7 @@ import java.time.LocalDate;
 
 @ControllerAdvice
 public class GlobalException {
+    private final static String MESSAGE_DATE_ERROR = "Invalid field Birthday, required to be in the format - 'YYYY-MM-DD'";
 
     @ExceptionHandler(HttpMessageNotReadableException.class)
     @ResponseBody
@@ -21,7 +22,7 @@ public class GlobalException {
         if (cause instanceof InvalidFormatException) {
             InvalidFormatException formatException = (InvalidFormatException) cause;
             if (formatException.getTargetType().equals(LocalDate.class)) {
-                return ResponseJson.createErrorResponse(HttpStatus.BAD_REQUEST,"Invalid field Birthday, required to be in the format - 'YYYY-MM-DD'");
+                return ResponseJson.createErrorResponse(HttpStatus.BAD_REQUEST,MESSAGE_DATE_ERROR);
             }
         }
 

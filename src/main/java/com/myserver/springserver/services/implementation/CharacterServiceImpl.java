@@ -7,6 +7,7 @@ import com.myserver.springserver.repository.CharacterRepo;
 import com.myserver.springserver.services.CharacterService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -39,14 +40,16 @@ public class CharacterServiceImpl implements CharacterService {
 
     @Override
     public void updateCharacter(Long id, CharacterEntity character) throws NotFoundException {
-        CharacterEntity updateHero = characterRepo.findById(id).orElseThrow(() -> new NotFoundException(String.format(HERO_NOT_FOUND, id)));
+        CharacterEntity updateHero = this.getCharacter(id);
 
-        updateHero.setAlias(character.getAlias());
-        updateHero.setFull_name(character.getFull_name());
-        updateHero.setAlignment(character.getAlignment());
-        updateHero.setAbilities(character.getAbilities());
-        updateHero.setAge(character.getAge());
-        updateHero.setTeam(character.getTeam());
+        if (character.getAlias() != null) updateHero.setAlias(character.getAlias());
+        if (character.getFullname() != null) updateHero.setFullname(character.getFullname());
+        if (character.getAlignment() != null) updateHero.setAlignment(character.getAlignment());
+        if (character.getAbilities() != null) updateHero.setAbilities(character.getAbilities());
+        if (character.getAge() != null) updateHero.setAge(character.getAge());
+        if (character.getTeam() != null) updateHero.setTeam(character.getTeam());
+        updateHero.setUpdated(LocalDateTime.now());
+
         characterRepo.save(updateHero);
     }
 

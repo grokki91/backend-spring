@@ -45,7 +45,7 @@ public class AuthServiceImpl implements AuthService {
                 .build();
 
 
-        userService.add(user);
+        userService.save(user);
         CustomUserDetails userDetails = new CustomUserDetails(user);
         String jwt = jwtCore.generateToken(userDetails);
         return new JwtResponse(jwt);
