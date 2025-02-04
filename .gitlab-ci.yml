@@ -30,7 +30,7 @@ deploy-backend:
         git pull origin main
         mvn clean package
         pm2 delete server || true
-        pm2 start java --name "server" -- -jar target/*.jar
+        pm2 start java --name "server" -- -jar target/SpringBootRestService-1.0.jar
         pm2 save
       EOF
   only:
