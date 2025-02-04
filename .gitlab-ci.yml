@@ -25,6 +25,7 @@ deploy-backend:
     - |
       ssh -i ~/.ssh/id_rsa $VPS_USER@$VPS_IP <<'EOF'
         set -e
+        export PATH=$PATH:/home/hero/.nvm/versions/node/v22.13.1/bin
         cd app/server
         git pull origin main
         mvn clean package
