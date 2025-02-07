@@ -3,7 +3,6 @@ package com.myserver.springserver.security;
 import com.myserver.springserver.services.implementation.CustomUserDetailsService;
 import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -18,9 +17,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.web.cors.CorsConfiguration;
-import org.springframework.web.cors.CorsConfigurationSource;
-import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 @Configuration
 @EnableWebSecurity
@@ -33,9 +29,6 @@ public class SecurityConfig {
     @Autowired
     private AccessDeniedHandler accessDeniedHandler;
 
-    @Value("${app.cors}")
-    private String corsAllowedOrigin;
-
     public SecurityConfig(JwtFilter jwtFilter, CustomUserDetailsService detailsService) {
         this.jwtFilter = jwtFilter;
         this.detailsService = detailsService;
@@ -47,7 +40,6 @@ public class SecurityConfig {
         CustomAuthFilter customAuthFilter = new CustomAuthFilter(authManager, jwtCore);
 
         http
-                .cors(c -> c.configurationSource(corsConfig()))
                 .csrf(AbstractHttpConfigurer::disable)
                 .sessionManagement((session) -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
@@ -70,18 +62,5 @@ public class SecurityConfig {
     @Bean
     public AuthenticationManager authManager(AuthenticationConfiguration configuration) throws Exception {
         return configuration.getAuthenticationManager();
-    }
-
-    @Bean
-    public CorsConfigurationSource corsConfig() {
-        CorsConfiguration configuration = new CorsConfiguration();
-        configuration.addAllowedOrigin(corsAllowedOrigin);
-        configuration.addAllowedMethod("*");
-        configuration.addAllowedHeader("*");
-        configuration.setAllowCredentials(true);
-
-        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("/**", configuration);
-        return source;
     }
 }
