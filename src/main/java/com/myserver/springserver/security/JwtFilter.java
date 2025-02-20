@@ -86,8 +86,6 @@ public class JwtFilter extends OncePerRequestFilter {
         } catch (Exception e) {
             SecurityContextHolder.clearContext();
             sendErrorResponse(response, HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
-        } finally {
-            SecurityContextHolder.clearContext();
         }
     }
 
