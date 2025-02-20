@@ -1,7 +1,6 @@
 package com.myserver.springserver.validation;
 
 import com.myserver.springserver.model.CharacterEntity;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;

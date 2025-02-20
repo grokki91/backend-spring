@@ -7,7 +7,6 @@ import com.myserver.springserver.security.JwtCore;
 import com.myserver.springserver.services.UserService;
 import com.myserver.springserver.util.ResponseJson;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
-import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

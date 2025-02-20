@@ -5,7 +5,6 @@ import com.myserver.springserver.exception.NotFoundException;
 import com.myserver.springserver.model.CharacterEntity;
 import com.myserver.springserver.services.implementation.CharacterServiceImpl;
 import com.myserver.springserver.util.ResponseJson;
-import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
