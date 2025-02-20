@@ -38,53 +38,65 @@ public class JwtFilter extends OncePerRequestFilter {
 
 
     @Override
-    protected void doFilterInternal(@NonNull HttpServletRequest request, @NonNull HttpServletResponse response, @NonNull FilterChain filterChain) throws ServletException, IOException {
+    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
+            throws ServletException, IOException {
         String uri = request.getRequestURI();
+        System.out.println("Request URI: " + uri);
 
-        if (uri.equals("/signup") || uri.equals("/login") || uri.contains("/swagger-ui") || uri.contains("/v3/api-docs") || uri.contains("/swagger-resources") || uri.contains("/webjars")) {
+        if (uri.equals("/api/signup") || uri.equals("/api/login") ||
+                uri.contains("/swagger-ui") || uri.contains("/v3/api-docs") ||
+                uri.contains("/swagger-resources") || uri.contains("/webjars")) {
             filterChain.doFilter(request, response);
             return;
         }
 
         try {
             String header = request.getHeader(HEADER);
+            System.out.println("Authorization header: " + header);
 
             if (header == null) {
-                sendErrorResponse(response, HttpStatus.UNAUTHORIZED,"JWT is missing");
+                sendErrorResponse(response, HttpStatus.UNAUTHORIZED, "JWT is missing");
                 return;
             } else if (!header.startsWith(BEARER)) {
-                sendErrorResponse(response, HttpStatus.UNAUTHORIZED,"JWT doesn't contain a BEARER");
+                sendErrorResponse(response, HttpStatus.UNAUTHORIZED, "JWT doesn't contain a BEARER");
                 return;
             }
 
             String jwt = header.substring(BEARER.length());
             String userName = jwtCore.extractUserName(jwt);
+            System.out.println("JWT: " + jwt);
+            System.out.println("Extracted username: " + userName);
 
             if (StringUtils.hasText(userName) && SecurityContextHolder.getContext().getAuthentication() == null) {
                 UserDetails userDetails = userService.loadUserByUsername(userName);
+                System.out.println("UserDetails: " + userDetails);
+                System.out.println("Authorities: " + userDetails.getAuthorities());
+                boolean isValid = jwtCore.isTokenValid(jwt, userDetails);
+                System.out.println("Token valid: " + isValid);
 
-                if (jwtCore.isTokenValid(jwt, userDetails)) {
-                    SecurityContext context = SecurityContextHolder.createEmptyContext();
-
+                if (isValid) {
                     UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(
                             userDetails, null, userDetails.getAuthorities()
                     );
-
                     token.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
                     SecurityContextHolder.getContext().setAuthentication(token);
+                    System.out.println("Authentication set: " + SecurityContextHolder.getContext().getAuthentication());
+                } else {
+                    sendErrorResponse(response, HttpStatus.UNAUTHORIZED, "JWT is not valid");
+                    return;
                 }
+            } else {
+                System.out.println("No username or authentication already exists");
             }
 
             filterChain.doFilter(request, response);
         } catch (ExpiredJwtException e) {
-            sendErrorResponse(response, HttpStatus.UNAUTHORIZED,"JWT is already expired");
+            sendErrorResponse(response, HttpStatus.UNAUTHORIZED, "JWT is already expired");
         } catch (MalformedJwtException e) {
             sendErrorResponse(response, HttpStatus.UNAUTHORIZED, "JWT is invalid");
         } catch (UsernameNotFoundException e) {
-            SecurityContextHolder.clearContext();
             sendErrorResponse(response, HttpStatus.NOT_FOUND, e.getMessage());
         } catch (Exception e) {
-            SecurityContextHolder.clearContext();
             sendErrorResponse(response, HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
         }
     }
