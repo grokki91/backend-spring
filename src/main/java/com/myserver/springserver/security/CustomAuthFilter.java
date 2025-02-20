@@ -22,7 +22,7 @@ public class CustomAuthFilter extends AbstractAuthenticationProcessingFilter {
     private final JwtCore jwtCore;
 
     protected CustomAuthFilter(AuthenticationManager authenticationManager, JwtCore jwtCore) {
-        super("/login");
+        super("/api/login");
         setAuthenticationManager(authenticationManager);
         this.jwtCore = jwtCore;
     }
